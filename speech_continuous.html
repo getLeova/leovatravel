@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: sans-serif;
+            background-color: #fafafa;
+        }
+        #main {
+            width: 55%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .xborder {
+            border: 1px dashed green;
+        }
+        #mic {
+            position: fixed;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            width: 7%;
+            cursor: pointer;
+        }
+        #input {
+            border: 1px solid #9e9e9e;
+            border-radius: 5px;
+            width: 100%;
+            height: 100px;
+            font-size: 2rem;
+            background-color: #fff;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        #output {
+            border: 1px solid #9e9e9e;
+            border-radius: 5px;
+            width: 100%;
+            height: 150px;
+            font-size: 1.5rem;
+            background-color: #fff;
+            -ms-word-break: break-all;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>  
+    <div id="main" class="">
+        <img src="http://leovaresource7.appspot.com/imgs/leova_travel_logo.png" style="width: 15rem; height: auto;" />
+        <h2 style="margin-bottom: 2.5rem;">Voice Recognition Boilerplate (Continuous Speech)</h2>
+
+        <div style="text-align: left;"><h3>Voice Recognition Output</h3></div>
+        <input type="text" id="input" />
+        <div style="text-align: right;"><button id="show" style="padding: 0.5rem 1rem;">Show Results</button></div>
+
+        <div style="text-align: left;"><h3>Wrapper Output</h3></div>
+        <div id="output"></div>
+
+        <img id="mic" src="http://leovaresource7.appspot.com/imgs/mic0.png" />
+    </div>
+    <p style="color:rgba(0,0,0,0.3); font-size: 11px; text-align: center">&#169; 2015, 17E Tech, All Rights Reserved</p>
+    <script>
+        var mic_flag = true;
+        var recognizer = new webkitSpeechRecognition();
+        recognizer.lang = "en";
+        recognizer.continuous = true;
+        recognizer.interimResults = false;
+        recognizer.onresult = function (event) {
+            if (event.results.length > 0) {
+                var result = event.results[event.results.length - 1];
+                if (result.isFinal) {
+                    document.getElementById('input').value = result[0].transcript.toLowerCase();
+                    console.log(result[0].transcript.toLowerCase());
+                }
+            }
+        };
+
+        document.getElementById('show').addEventListener('click', function () {
+            var val = document.getElementById('input').value;
+            getResp();
+        });
+        document.getElementById('mic').addEventListener('click', function () {
+            if (mic_flag) {
+                recognizer.start();
+                recognizer.onend = function () {
+                    recognizer.start();
+                    console.log("recognizer restarted ...");
+                };
+                mic_flag = false;
+            } else {
+                recognizer.stop();
+                setTimeout(function () {
+                    mic_flag = true;
+                }, 2000);
+                console.log(mic_flag);
+            }
+        });
+        function getResp() {
+            var tzo = new Date().getTimezoneOffset();
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '');       // enter endpoint here
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            var data = {
+                'q': document.getElementById('input').value,
+                'api_key': '',      // enter api key here
+                'channel': '',      // enter channel key here
+                'tzo': tzo
+            };
+            xhr.send(JSON.stringify(data));
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var resp = JSON.parse(xhr.responseText);
+                    console.log(resp);
+                    var ret = parseToGoToBus(resp);
+                    console.log(ret);
+                    document.getElementById('output').innerHTML = '<a href="' + ret + '">' + ret + '</a>';
+                }
+            };
+        }
+    </script>
+</body>
+</html>
