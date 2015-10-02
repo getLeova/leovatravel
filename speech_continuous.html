@@ -91,7 +91,6 @@
                 var result = event.results[event.results.length - 1];
                 if (result.isFinal) {
                     document.getElementById('input').value = result[0].transcript.toLowerCase();
-                    console.log(result[0].transcript.toLowerCase());
                 }
             }
         };
@@ -105,7 +104,6 @@
                 recognizer.start();
                 recognizer.onend = function () {
                     recognizer.start();
-                    console.log("recognizer restarted ...");
                 };
                 mic_flag = false;
             } else {
@@ -113,7 +111,6 @@
                 setTimeout(function () {
                     mic_flag = true;
                 }, 2000);
-                console.log(mic_flag);
             }
         });
         function getResp() {
@@ -131,9 +128,7 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     var resp = JSON.parse(xhr.responseText);
-                    console.log(resp);
                     var ret = parseToGoToBus(resp);
-                    console.log(ret);
                     document.getElementById('output').innerHTML = '<a href="' + ret + '">' + ret + '</a>';
                 }
             };

@@ -100,7 +100,6 @@
                     var result = event.results[event.results.length - 1];
                     if (result.isFinal) {
                         document.getElementById('input').value = result[0].transcript.toLowerCase();
-                        console.log(result[0].transcript.toLowerCase());
                     }
                 }
             };
@@ -121,7 +120,6 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     var resp = JSON.parse(xhr.responseText);
-                    console.log(resp);
                     var ret = parseToGoBuses(resp);
                     document.getElementById('output').innerHTML = '<a href="' + ret + '" target="_blank">' + ret + '</a>';
                 }
