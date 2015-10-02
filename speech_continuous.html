@@ -65,6 +65,22 @@
     </div>
     <p style="color:rgba(0,0,0,0.3); font-size: 11px; text-align: center">&#169; 2015, 17E Tech, All Rights Reserved</p>
     <script>
+        // enter your api key and endpoint here
+        window.api_key = '';
+        window.endpoint = '';
+
+
+        window.addEventListener('load', function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://leova-platform.appspot.com/unikeygen');
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 || xhr.status == 200) {
+                    window.channel = xhr.responseText;
+                }
+            };
+        });
+
         var mic_flag = true;
         var recognizer = new webkitSpeechRecognition();
         recognizer.lang = "en";
@@ -103,12 +119,12 @@
         function getResp() {
             var tzo = new Date().getTimezoneOffset();
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '');       // enter endpoint here
+            xhr.open('POST', window.endpoint);
             xhr.setRequestHeader('Content-Type', 'application/json');
             var data = {
                 'q': document.getElementById('input').value,
-                'api_key': '',      // enter api key here
-                'channel': '',      // enter channel key here
+                'api_key': window.api_key,
+                'channel': window.channel,
                 'tzo': tzo
             };
             xhr.send(JSON.stringify(data));
