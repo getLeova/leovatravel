@@ -24,21 +24,15 @@ function parseDate(params) {
 }
 
 function parseToGoBuses(params) {
-    var places_dict = {
-        'manhattan': 1,
-        'cambridge': 2,
-        'newton': 3
-    };
+    var places_list = ["1", "2", "3"];
     if (params['FlightType'] === 'One-Way') {
         // parses the date
         var date1 = parseDate(params['trips'][0]['date1']);
 
         var dDate  = encodeURIComponent(date1['date'] + '/' + date1['month'] + '/' + date1['year']);
-        var sFrom = places_dict[params['trips'][0]['from_city_name']];
-        var sTo = places_dict[params['trips'][0]['to_city_name']];
-        console.log(sFrom);
-        console.log(sTo);
-        if (Object.keys(places_dict).indexOf(params['trips'][0]['from_city_name']) == -1 || Object.keys(places_dict).indexOf(params['trips'][0]['to_city_name']) == -1) {
+        var sFrom = params['trips'][0]['from_city_code'];
+        var sTo = params['trips'][0]['to_city_code'];
+        if (places_list.indexOf(sFrom) == -1 || places_list.indexOf(sTo) == -1) {
             return ('GoBuses only supports Manhattan, Cambridge and Newton');
         }
 
