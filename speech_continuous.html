@@ -75,7 +75,7 @@
             xhr.open('GET', 'https://leova-platform.appspot.com/unikeygen');
             xhr.send();
             xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 || xhr.status == 200) {
+                if (xhr.readyState == 4 && xhr.status == 200) {
                     window.channel = xhr.responseText;
                 }
             };
@@ -129,6 +129,9 @@
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     var resp = JSON.parse(xhr.responseText);
                     var ret = parseToGoToBus(resp);
+                    //  var ret = parseToGoToBus(resp);
+                    //  var ret = parseToWanderu(resp);
+                    //  var ret = parseToPeterPanBus(resp);
                     document.getElementById('output').innerHTML = '<a href="' + ret + '">' + ret + '</a>';
                 }
             };
