@@ -48,8 +48,11 @@ function parseToGoBuses(params) {
 
         var dDate = encodeURIComponent(date1['date'] + '/' + date1['month'] + '/' + date1['year']);
         var rDate = encodeURIComponent(date2['date'] + '/' + date2['month'] + '/' + date2['year']);
-        var sFrom = places_dict[params['trips'][0]['from_city_name']];
-        var sTo = places_dict[params['trips'][0]['to_city_name']];
+        var sFrom = params['trips'][0]['from_city_code'];
+        var sTo = params['trips'][0]['to_city_code'];
+        if (places_list.indexOf(sFrom) == -1 || places_list.indexOf(sTo) == -1) {
+            return ('GoBuses only supports Manhattan, Cambridge and Newton');
+        }
         var qty = parseInt(params['people_dict']['adult']) + parseInt(params['people_dict']['child']);
 
         // url has time parameter of 00:00:00 UTC
